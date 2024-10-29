@@ -1,0 +1,27 @@
+{
+    "name": "j-molinas/minimal-off-canvas",
+    "description": "j-molinas/minimal-off-canvas",
+    "type": "shopware-platform-plugin",
+    "version": "1.0.0",
+    "license": "MIT",
+    "require": {
+        "shopware/core": "~6.6.0"
+    },
+    "extra": {
+        "shopware-plugin-class": "MinimalOffCanvas\\MinimalOffCanvas",
+        "label": {
+            "de-DE": "Minimal Offcanvas",
+            "en-GB": "Minimal Offcanvas"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "MinimalOffCanvas\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "JMolinas\\Tests\\": "tests/"
+        }
+    }
+}

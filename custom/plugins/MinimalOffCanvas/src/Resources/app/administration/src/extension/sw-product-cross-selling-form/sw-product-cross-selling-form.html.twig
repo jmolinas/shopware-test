@@ -1,0 +1,14 @@
+
+{% block sw_prduct_cross_selling_form_context_menu %}
+    {% parent %}
+
+    <sw-container columns="repeat(auto-fit, minmax(250px, 1fr)" gap="0px 30px">
+        <sw-checkbox-field
+            v-model:value="crossSelling.extensions.crossSellingOffcanvas.show"
+            class="sw-product-detail-cross-offcanvas-switch"
+            label="Show in Offcanvas"
+            :disabled="!allowEdit"
+            name="sw-field--crossSelling-offcanvas"
+        />
+    </sw-container>
+{% endblock %}

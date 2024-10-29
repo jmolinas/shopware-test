@@ -1,0 +1,71 @@
+services:
+  webserver:
+    image: nginx:alpine
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "8000:80"
+      - "4430:443"
+    volumes:
+      - ./:/var/www/html
+      - ./docker/nginx/conf.d/:/etc/nginx/conf.d/
+    networks:
+      - dev
+  db:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: shopware
+      MYSQL_USER: shopware
+      MYSQL_PASSWORD: shopware
+    networks:
+      - dev
+    ports:
+      - "33060:3306"
+    volumes:
+      - "database:/var/lib/mysql"
+  php:
+    build: docker/php
+    environment:
+      XDEBUG_MODE: debug,develop
+      XDEBUG_CONFIG: client_host=host.docker.internal remote_host=host.docker.internal client_port=9003 discover_client_host=true start_with_request=yes
+      PHP_OPCACHE_VALIDATE_TIMESTAMPS: 1
+      mode: development
+    volumes:
+      - .:/var/www/html
+    command: php-fpm
+    links:
+      - db
+    ports:
+      - "9000:9000"
+    networks:
+      - dev
+  opensearch:
+    image: opensearchproject/opensearch:2
+    volumes:
+      - opensearch-data:/usr/share/opensearch/data
+    environment:
+      OPENSEARCH_INITIAL_ADMIN_PASSWORD: mD.54373wg
+      discovery.type: single-node
+      plugins.security.disabled: 'true'
+    ports:
+      - "9200"
+  mailer:
+    image: axllent/mailpit
+    ports:
+      - "1025"
+      - "8025"
+    environment:
+      MP_SMTP_AUTH_ACCEPT_ANY: 1
+      MP_SMTP_AUTH_ALLOW_INSECURE: 1
+
+networks:
+  dev:
+    driver: bridge
+    name: dev
+
+volumes:
+  opensearch-data:
+    name: opensearch-data
+  database:
+    name: database
